@@ -13,8 +13,11 @@
                 <label>Text</label>
                 <input v-model="form.text" type="text">
             </div>
-
-            <input type="button" value="Send" v-on:click="createMail">
+            <div class="input">
+                <label>I agree to terms and conditions</label>
+                <input v-model="form.check" type="checkbox">
+            </div>
+            <input type="button" value="Send" v-on:click="createMail" :disabled="form.check == false">
         </form>
         <div class="errors">
             <div v-for="errorField in errors">
@@ -38,7 +41,8 @@ export default {
             form: {
                 name: "",
                 email: "",
-                text: ""
+                text: "",
+                check: false
             },
             errors: [],
             status: false
