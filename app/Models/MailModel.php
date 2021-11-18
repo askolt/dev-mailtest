@@ -10,4 +10,19 @@ class MailModel extends Model
     use HasFactory;
 
     protected $table = 'mails';
+
+    protected $fillable = [
+        'name',
+        'email',
+        'text',
+    ];
+
+    public $allowFilter = [
+        'id',
+        'name',
+        'email',
+        'text',
+        'created_at',
+        'updated_at'
+    ];
 }
