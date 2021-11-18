@@ -11,13 +11,13 @@ class MailApiTest extends TestCase
 
     public function test_get_list()
     {
-        $response = $this->get('/api/mail/list');
+        $response = $this->get('/api/mail/list', ['Accept' => 'application/json']);
         $response->assertStatus(200);
     }
 
     public function test_get_mail_fail()
     {
-        $response = $this->post('/api/mail/one', []);
+        $response = $this->post('/api/mail/one', [], ['Accept' => 'application/json']);
         $response->assertStatus(422);
     }
 
@@ -28,7 +28,8 @@ class MailApiTest extends TestCase
         $response = $this->post('/api/mail/one',
             [
                 'id' => $mail->id
-            ]
+            ],
+            ['Accept' => 'application/json']
         );
         $response->assertStatus(200);
     }
@@ -43,8 +44,9 @@ class MailApiTest extends TestCase
         $response = $this->post('/api/mail/one',
             [
                 'id' => $mail->id,
-                'fields' => ['name']
-            ]
+                'fields' => 'name'
+            ],
+            ['Accept' => 'application/json']
         );
         $response->assertStatus(200);
         $response->assertExactJson([
@@ -63,8 +65,9 @@ class MailApiTest extends TestCase
         $response = $this->post('/api/mail/one',
             [
                 'id' => $mail->id,
-                'fields' => ['name', 'huehue']
-            ]
+                'fields' => 'name,huehue'
+            ],
+            ['Accept' => 'application/json']
         );
         $response->assertStatus(200);
         $response->assertExactJson([
@@ -73,10 +76,32 @@ class MailApiTest extends TestCase
         ]);
     }
 
+    /*
+ * Get one mail with filter and without trash
+ */
+    public function test_get_mail_by_id_case_4()
+    {
+        $mail = MailModel::first();
+        $this->assertNotNull($mail);
+        $response = $this->post('/api/mail/one',
+            [
+                'id' => $mail->id,
+                'fields' => 'name,email'
+            ],
+            ['Accept' => 'application/json']
+        );
+        $response->assertStatus(200);
+        $response->assertExactJson([
+            'id' => $mail->id,
+            'name' => $mail->name,
+            'email' => $mail->email
+        ]);
+    }
+
     public function test_create_mail_fail()
     {
         $mailData = [];
-        $response = $this->post('/api/mail/create', $mailData);
+        $response = $this->post('/api/mail/create', $mailData, ['Accept' => 'application/json']);
         $response->assertStatus(422);
     }
 
@@ -87,7 +112,7 @@ class MailApiTest extends TestCase
             'email' => 'example@example.com',
             'text' => 'Dear diary, today I did a test'
         ];
-        $response = $this->post('/api/mail/create', $mailData);
+        $response = $this->post('/api/mail/create', $mailData, ['Accept' => 'application/json']);
         $response->assertStatus(200);
         $mail = MailModel::orderByDesc('id')->first();
         $this->assertNotNull($mail);
