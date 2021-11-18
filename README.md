@@ -1,6 +1,9 @@
 A simple app on the laravel with form for records data from form to db.
 
 ## Install via docker-compose
+
+For PostgreSQL use the port 5432, does not work otherwise. 😂🤦‍♂️
+
 ```
 chmod +x install.sh
 ./install.sh
