@@ -11,8 +11,21 @@ class MailDbService implements MailServiceInterface
 
     public function getList(array $filters): array
     {
-
-        return MailModel::paginate()->all();
+        if (!empty($filters['sort'])) {
+            $sort = mb_strtolower($filters['sort']);
+            if (!in_array($sort, ['asc', 'desc'])) {
+                $sort = 'asc';
+            }
+        } else {
+            $sort = 'asc';
+        }
+        if (!empty($filters['page'])) {
+            $page = (int)$filters['page'] > 0 ? (int)$filters['page'] : 1;
+        } else {
+            $page = 1;
+        }
+        return MailModel::orderBy('id', $sort)->select(['id', 'name', 'email'])
+            ->paginate(10, ['*'], 'page', $page)->all();
     }
 
     public function getMail(int $id, array $select = []): MailModel|null
