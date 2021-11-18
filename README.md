@@ -2,11 +2,11 @@ A simple app on the laravel with form for records data from form to db.
 
 ## Install via docker-compose
 ```
-docker-compose build app
 chmod +x install.sh
 ./install.sh
+docker-compose build app
 docker-compose up -d 
-docker-compose exec app compose install
+docker-compose exec app composer install
 docker-compose exec app php artisan migrate
 docker-compose exec app php artisan key:generate
 docker-compose exec app npm install
