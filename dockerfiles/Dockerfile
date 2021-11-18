@@ -52,5 +52,6 @@ RUN mkdir -p /home/$user/.composer && \
 
 #RUN cp $HOME/.bashrc /home/$user/.bashrc
 #RUN chmod +x $NVM_DIR/nvm.sh
+WORKDIR /var/www
 
 USER $user
