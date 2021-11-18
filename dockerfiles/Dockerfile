@@ -29,6 +29,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # nvm environment variables
 ENV NVM_DIR /usr/local/nvm
 ENV NODE_VERSION 14.16.0
+ENV NPM_VERSION 7.6.3
 
 SHELL ["/bin/bash", "--login", "-c"]
 RUN mkdir -p $NVM_DIR
@@ -38,16 +39,18 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | b
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
-    && nvm use default
+    && nvm use default \
+    && npm install npm@$NPM_VERSION -g
 
 ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+#ENV PATH      $NVM_DIR:$PATH
 # Create system user to run Composer and Artisan Commands
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user
 
-# Set working directory
-WORKDIR /var/www
+#RUN cp $HOME/.bashrc /home/$user/.bashrc
+#RUN chmod +x $NVM_DIR/nvm.sh
 
 USER $user
