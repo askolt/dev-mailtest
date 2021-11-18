@@ -1,6 +1,6 @@
 require('./bootstrap');
 
-import Vue from 'Vue';
+window.Vue = require('vue').default;
 
 Vue.component('mail-form', require('./components/MailForm').default);
 
@@ -16,15 +16,9 @@ var app = new Vue({
         page: 1
     },
     methods: {
-        loadMails: function() {
-            console.log(1);
-        },
-        createMail: function ()
-        {
 
-        }
     },
     mounted() {
-        this.loadMails();
+
     }
 })
